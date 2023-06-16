@@ -1,13 +1,9 @@
 package ru.practicum;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @Builder
@@ -18,6 +14,5 @@ public class EndpointHitDto {
     String app;
     String uri;
     String ip;
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     String timestamp;
 }
