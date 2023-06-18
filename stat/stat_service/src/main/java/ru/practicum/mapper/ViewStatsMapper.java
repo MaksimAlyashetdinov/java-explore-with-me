@@ -1,8 +1,11 @@
 package ru.practicum.mapper;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.ViewStatsDto;
 import ru.practicum.model.ViewStats;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ViewStatsMapper {
 
     public static ViewStats mapToViewStats(ViewStatsDto viewStatsDto) {

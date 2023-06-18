@@ -1,10 +1,11 @@
 package ru.practicum.mapper;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.model.EndpointHit;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class EndpointHitMapper {
 
     public static EndpointHit mapToEndpointHit(EndpointHitDto endpointHitDto) {
@@ -13,8 +14,8 @@ public class EndpointHitMapper {
                           .app(endpointHitDto.getApp())
                           .uri(endpointHitDto.getUri())
                           .ip(endpointHitDto.getIp())
-                          .timestamp(LocalDateTime.parse(endpointHitDto.getTimestamp(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                                                  .build();
+                          .timestamp(endpointHitDto.getTimestamp())
+                          .build();
     }
 
     public static EndpointHitDto mapToEndpointHitDto(EndpointHit endpointHit) {
@@ -23,7 +24,7 @@ public class EndpointHitMapper {
                              .app(endpointHit.getApp())
                              .uri(endpointHit.getUri())
                              .ip(endpointHit.getIp())
-                             .timestamp(endpointHit.getTimestamp().toString())
+                             .timestamp(endpointHit.getTimestamp())
                              .build();
     }
 }

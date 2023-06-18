@@ -1,7 +1,6 @@
 package ru.practicum.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +25,7 @@ public class StatServiceImpl implements StatService {
     public EndpointHitDto save(EndpointHitDto endpointHitDto) {
         EndpointHit endpointHit = statRepository.save(EndpointHitMapper.mapToEndpointHit(endpointHitDto));
         log.info("Save in stat {}", endpointHit);
-        return endpointHitDto;
+        return EndpointHitMapper.mapToEndpointHitDto(endpointHit);
     }
 
     @Override
@@ -40,7 +39,7 @@ public class StatServiceImpl implements StatService {
             viewStatsFromRepository = statRepository.findAllViewStats(start, end, uris);
             log.info("Get all view stats: {}", viewStatsFromRepository);
         }
-        return new ArrayList<>(viewStatsFromRepository.stream().map(ViewStatsMapper::mapToViewStatsDto).collect(
-                Collectors.toList()));
+        return viewStatsFromRepository.stream().map(ViewStatsMapper::mapToViewStatsDto).collect(
+                Collectors.toList());
     }
 }
