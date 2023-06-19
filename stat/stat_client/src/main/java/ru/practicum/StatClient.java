@@ -30,11 +30,7 @@ public class StatClient extends BaseClient {
         parameters.put("start", start);
         parameters.put("end", end);
         if (uris != null && uris.length != 0) {
-            String allUri = new String();
-            for (String uri : uris) {
-                allUri = String.join("&uris=", uri);
-            }
-            parameters.put("uris", allUri);
+            parameters.put("uris", String.join("&uris=", uris));
         }
         parameters.put("unique", unique);
 
