@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.practicum.category.mapper.CategoryMapper;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
@@ -16,7 +15,6 @@ import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.repository.CompilationRepository;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
-import ru.practicum.event.service.EventService;
 import ru.practicum.exception.NotFoundException;
 
 @Service
@@ -24,7 +22,6 @@ import ru.practicum.exception.NotFoundException;
 public class CompilationServiceImpl implements CompilationService {
 
     private final CompilationRepository compilationRepository;
-    private final EventService eventsService;
     private final EventRepository eventRepository;
 
     @Override
@@ -54,7 +51,7 @@ public class CompilationServiceImpl implements CompilationService {
     public Compilation getById(Integer compId) {
         return compilationRepository.findById(compId)
                                     .orElseThrow(() -> new NotFoundException(
-                                 "Compilation with id " + compId + " not found."));
+                                            "Compilation with id " + compId + " not found."));
     }
 
     @Override
@@ -66,13 +63,14 @@ public class CompilationServiceImpl implements CompilationService {
     public Compilation update(Integer compId, UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilation = getById(compId);
         if (updateCompilationRequest.getEvents() != null && !updateCompilationRequest.getEvents()
-                  .isEmpty()) {
+                                                                                     .isEmpty()) {
             compilation.getEvents()
                        .addAll(updateCompilationRequest.getEvents()
-                                    .stream()
-                                    .map(id -> eventRepository.findById(id).get())
-                                    .collect(
-                                            Collectors.toList()));
+                                                       .stream()
+                                                       .map(id -> eventRepository.findById(id)
+                                                                                 .get())
+                                                       .collect(
+                                                               Collectors.toList()));
         }
         if (updateCompilationRequest.getPinned() != null) {
             updateCompilationRequest.getPinned();

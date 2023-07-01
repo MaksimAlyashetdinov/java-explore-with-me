@@ -15,18 +15,19 @@ import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
 import ru.practicum.compilation.dto.UpdateCompilationRequest;
 import ru.practicum.compilation.mapper.CompilationMapper;
-import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.service.CompilationService;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin/compilations")
 public class AdminCompilationsController {
+
     private final CompilationService service;
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public CompilationDto createCompilation(@RequestBody @Validated NewCompilationDto newCompilationDto) {
+    public CompilationDto createCompilation(
+            @RequestBody @Validated NewCompilationDto newCompilationDto) {
         return service.create(newCompilationDto);
     }
 
@@ -39,6 +40,6 @@ public class AdminCompilationsController {
     @PatchMapping("/{compId}")
     public CompilationDto patchCompilation(@PathVariable Integer compId,
             @RequestBody @Validated UpdateCompilationRequest input) {
-        return CompilationMapper.toCompilationDto(service.update(compId,input));
+        return CompilationMapper.toCompilationDto(service.update(compId, input));
     }
 }

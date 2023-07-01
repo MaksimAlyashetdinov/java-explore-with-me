@@ -29,7 +29,8 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMissingServletRequestParameterException(final MissingServletRequestParameterException e) {
+    public ErrorResponse handleMissingServletRequestParameterException(
+            final MissingServletRequestParameterException e) {
         log.error("MissingServletRequestParameterException occurred: {}", e.getMessage());
         return new ErrorResponse(
                 LocalDateTime.now(),

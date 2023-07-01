@@ -1,14 +1,9 @@
 package ru.practicum.event.dto;
 
 import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +12,6 @@ import ru.practicum.Location.model.Location;
 import ru.practicum.category.model.Category;
 import ru.practicum.event.EventState;
 import ru.practicum.user.dto.UserShortDto;
-import ru.practicum.user.model.User;
 
 @Data
 @Builder

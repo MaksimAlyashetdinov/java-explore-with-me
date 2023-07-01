@@ -9,7 +9,8 @@ public interface RequestService {
 
     List<ParticipationRequestDto> getEventsWithUserRequest(Integer userId, Integer eventId);
 
-    EventRequestStatusUpdateResult updateRequestStatus(Integer userId, Integer eventId, EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest);
+    EventRequestStatusUpdateResult updateRequestStatus(Integer userId, Integer eventId,
+            EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest);
 
     List<ParticipationRequestDto> getUserRequests(Integer userId);
 

@@ -7,6 +7,7 @@ import lombok.Value;
 @AllArgsConstructor
 @Value
 public class ErrorResponse {
+
     LocalDateTime timestamp;
     Integer status;
     String error;

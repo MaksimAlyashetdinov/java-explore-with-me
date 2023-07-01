@@ -31,20 +31,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(Integer id) {
-        contains(id);
+        containsCategory(id);
         log.info("Delete category with id {}", id);
         categoryRepository.deleteById(id);
     }
 
     @Override
     public Category updateCategory(Integer id, NewCategoryDto newCategoryDto) {
-        contains(id);
-        Category category = categoryRepository.findById(id).get();
+        containsCategory(id);
         Category categoryByName = categoryRepository.findByName(newCategoryDto.getName());
         if (categoryByName != null && categoryByName.getId() != id) {
             throw new ConflictException("Category already exist.");
         }
-        //validateCategory(newCategoryDto);
         log.info("Update category with id {} to {}", id, newCategoryDto.getName());
         return categoryRepository.saveAndFlush(Category.builder()
                                                        .id(id)
@@ -55,20 +53,21 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> findAllCategories(int from, int size) {
         log.info("Get all categories.");
-        Pageable pageable = PageRequest.of(from,size);
-        return categoryRepository.findAll(pageable).stream().collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(from, size);
+        return categoryRepository.findAll(pageable)
+                                 .stream()
+                                 .collect(Collectors.toList());
     }
 
     @Override
     public Category getCategory(Integer id) {
-        contains(id);
+        containsCategory(id);
         log.info("Get category with id {}.", id);
         return categoryRepository.findById(id).get();
     }
 
     private void validateCategory(NewCategoryDto newCategoryDto) {
-        if (newCategoryDto.getName()
-                          .isBlank()) {
+        if (newCategoryDto.getName().isBlank()) {
             throw new ValidationException("The category name cannot be empty.");
         }
         if (categoryRepository.findByName(newCategoryDto.getName()) != null) {
@@ -76,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    private void contains(Integer id) {
+    private void containsCategory(Integer id) {
         if (!categoryRepository.existsById(id)) {
             throw new NotFoundException("The category with this id was not found.");
         }

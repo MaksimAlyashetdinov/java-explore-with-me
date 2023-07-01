@@ -16,16 +16,19 @@ import ru.practicum.compilation.service.CompilationService;
 @RequestMapping("/compilations")
 @AllArgsConstructor
 public class PublicCompilationsController {
+
     private final CompilationService compilationService;
 
     @GetMapping
-    public List<CompilationDto> getAllCompilations(@RequestParam(defaultValue = "false") Boolean pinned,
+    public List<CompilationDto> getAllCompilations(
+            @RequestParam(defaultValue = "false") Boolean pinned,
             @RequestParam(defaultValue = "0") Integer from,
             @RequestParam(defaultValue = "10") Integer size) {
-        return compilationService.getAll(pinned,from,size).stream().map(CompilationMapper::toCompilationDto)
+        return compilationService.getAll(pinned, from, size)
+                                 .stream()
+                                 .map(CompilationMapper::toCompilationDto)
                                  .collect(Collectors.toList());
     }
-
 
     @GetMapping("/{compId}")
     public CompilationDto getCompilations(@PathVariable Integer compId) {

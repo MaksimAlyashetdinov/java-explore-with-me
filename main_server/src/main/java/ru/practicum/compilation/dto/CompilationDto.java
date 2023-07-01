@@ -17,7 +17,7 @@ public class CompilationDto {
 
     private List<Event> events;
     @NotNull
-    private  Integer id;
+    private Integer id;
     @NotNull
     private Boolean pinned;
     @NotBlank

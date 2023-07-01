@@ -38,8 +38,10 @@ public class RequestServiceImpl implements RequestService {
         containsEvent(eventId);
         log.info("Get requests for event with id {}", eventId);
         List<Request> requests = requestRepository.findByEventId(eventId);
-        return requests.stream().map(RequestMapper::mapToParticipationRequestDto).collect(
-                Collectors.toList());
+        return requests.stream()
+                       .map(RequestMapper::mapToParticipationRequestDto)
+                       .collect(
+                               Collectors.toList());
     }
 
     @Override
@@ -50,14 +52,17 @@ public class RequestServiceImpl implements RequestService {
         EventRequestStatusUpdateResult eventRequestStatusUpdateResult = new EventRequestStatusUpdateResult();
         List<ParticipationRequestDto> confirmed = new ArrayList<>();
         List<ParticipationRequestDto> rejected = new ArrayList<>();
-        Event event = eventRepository.findById(eventId).get();
+        Event event = eventRepository.findById(eventId)
+                                     .get();
         List<Request> confirmedRequests = requestRepository.findByEventIdAndStatus(event.getId(),
                 StateRequest.CONFIRMED);
         validateEvent(event, confirmedRequests);
         int limit = event.getParticipantLimit() - confirmedRequests.size();
-        List<Request> requests = requestRepository.findAllByIdIn(eventRequestStatusUpdateRequest.getRequestIds());
+        List<Request> requests = requestRepository.findAllByIdIn(
+                eventRequestStatusUpdateRequest.getRequestIds());
         for (Request request : requests) {
-            if (!request.getStatus().equals(StateRequest.PENDING)) {
+            if (!request.getStatus()
+                        .equals(StateRequest.PENDING)) {
                 throw new ValidationException(
                         "You can't change status for request with id " + request.getId());
             }
@@ -77,6 +82,7 @@ public class RequestServiceImpl implements RequestService {
         event.setConfirmedRequests(event.getConfirmedRequests() + confirmed.size());
         eventRepository.saveAndFlush(event);
         eventRequestStatusUpdateResult.setRejectedRequests(rejected);
+        log.info("Update request status.");
         return eventRequestStatusUpdateResult;
     }
 
@@ -84,8 +90,10 @@ public class RequestServiceImpl implements RequestService {
     public List<ParticipationRequestDto> getUserRequests(Integer userId) {
         containsUser(userId);
         List<Request> userRequests = requestRepository.findByRequesterId(userId);
-        return userRequests.stream().map(RequestMapper::mapToParticipationRequestDto).collect(
-                Collectors.toList());
+        log.info("Get user requests.");
+        return userRequests.stream()
+                           .map(RequestMapper::mapToParticipationRequestDto)
+                           .collect(Collectors.toList());
     }
 
     @Override
@@ -95,23 +103,28 @@ public class RequestServiceImpl implements RequestService {
         Event event = eventRepository.findById(eventId).get();
         User requester = userRepository.findById(userId).get();
         if (requestRepository.findByRequesterIdAndEventId(userId, eventId).isPresent()) {
-            throw new ConflictException("It is not possible to submit a repeated request for participation.");
+            throw new ConflictException(
+                    "It is not possible to submit a repeated request for participation.");
         }
         if (event.getInitiator().getId().equals(userId)) {
-            throw new ConflictException("You cannot submit a request to participate in your own event.");
+            throw new ConflictException(
+                    "You cannot submit a request to participate in your own event.");
         }
         if (!event.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictException("You cannot submit a request to participate in an unpublished event.");
+            throw new ConflictException(
+                    "You cannot submit a request to participate in an unpublished event.");
         }
-        if (event.getParticipantLimit() != 0 && event.getParticipantLimit() == event.getConfirmedRequests()) {
-            throw new ConflictException("The limit of participants of the event has already been reached.");
+        if (event.getParticipantLimit() != 0
+                && event.getParticipantLimit() == event.getConfirmedRequests()) {
+            throw new ConflictException(
+                    "The limit of participants of the event has already been reached.");
         }
-
         Request newRequest = Request.builder()
                                     .requester(requester)
                                     .event(event)
-                .status(StateRequest.CONFIRMED)
-                                    .created(LocalDateTime.now()).build();
+                                    .status(StateRequest.CONFIRMED)
+                                    .created(LocalDateTime.now())
+                                    .build();
         if (event.getRequestModeration() == true && event.getParticipantLimit() != 0) {
             newRequest.setStatus(StateRequest.PENDING);
         } else {
@@ -119,6 +132,7 @@ public class RequestServiceImpl implements RequestService {
             event.setConfirmedRequests(event.getConfirmedRequests() + 1);
         }
         Request savedRequest = requestRepository.save(newRequest);
+        log.info("Create request:" + savedRequest);
         return RequestMapper.mapToParticipationRequestDto(savedRequest);
     }
 
@@ -129,9 +143,9 @@ public class RequestServiceImpl implements RequestService {
         Request request = requestRepository.findById(requestId).get();
         request.setStatus(StateRequest.CANCELED);
         Request savedRequest = requestRepository.saveAndFlush(request);
+        log.info("Cancel request: " + savedRequest);
         return RequestMapper.mapToParticipationRequestDto(savedRequest);
     }
-
 
     private void containsUser(Integer userId) {
         if (!userRepository.existsById(userId)) {

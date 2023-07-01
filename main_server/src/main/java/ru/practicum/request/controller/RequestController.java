@@ -1,7 +1,6 @@
 package ru.practicum.request.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +30,7 @@ public class RequestController {
 
     @GetMapping("/{userId}/requests")
     public List<ParticipationRequestDto> getUserRequests(@PathVariable Integer userId) {
+        log.info("Get user requests.");
         return requestService.getUserRequests(userId);
     }
 
@@ -38,7 +38,8 @@ public class RequestController {
     @PostMapping("/{userId}/requests")
     public ParticipationRequestDto addUserRequest(@Positive @PathVariable Integer userId,
             @RequestParam @Positive Integer eventId) {
-        return requestService.create(userId,eventId);
+        log.info("Add new request.");
+        return requestService.create(userId, eventId);
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -47,19 +48,23 @@ public class RequestController {
             @Positive @PathVariable Integer eventId,
             @RequestBody(required = false) @Validated
             EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
-        return requestService.updateRequestStatus(userId,eventId,eventRequestStatusUpdateRequest);
+        log.info("Update request.");
+        return requestService.updateRequestStatus(userId, eventId, eventRequestStatusUpdateRequest);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{userId}/events/{eventId}/requests")
-    public List<ParticipationRequestDto> getEventsWithUserRequest(@Positive @PathVariable Integer userId,
+    public List<ParticipationRequestDto> getEventsWithUserRequest(
+            @Positive @PathVariable Integer userId,
             @Positive @PathVariable Integer eventId) {
-        return requestService.getEventsWithUserRequest(userId,eventId);
+        log.info("Get events with user request.");
+        return requestService.getEventsWithUserRequest(userId, eventId);
     }
 
     @PatchMapping("/{userId}/requests/{requestId}/cancel")
     public ParticipationRequestDto deleteUserRequest(@PathVariable Integer userId,
             @PathVariable Integer requestId) {
-        return requestService.cancel(userId,requestId);
+        log.info("Delete request.");
+        return requestService.cancel(userId, requestId);
     }
 }

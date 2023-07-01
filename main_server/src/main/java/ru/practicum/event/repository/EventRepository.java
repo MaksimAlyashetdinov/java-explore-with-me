@@ -31,7 +31,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
             "e.eventDate between :start and :end and " +
             "e.state = :state and " +
             "(e.annotation like %:text% or e.description like %:text%)")
-    List<Event> findAllWithFilter(String text, List<Integer> categories, Boolean paid, LocalDateTime start,
+    List<Event> findAllWithFilter(String text, List<Integer> categories, Boolean paid,
+            LocalDateTime start,
             LocalDateTime end, EventState state, Pageable pageable);
 
     @Query("SELECT e from Event e " +

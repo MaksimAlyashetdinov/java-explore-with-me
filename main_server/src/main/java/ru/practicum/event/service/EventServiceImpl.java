@@ -7,9 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -66,20 +64,16 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto addEvent(Integer userId, NewEventDto newEventDto) {
         containsUser(userId);
-        if (newEventDto.getEventDate()
-                       .isBefore(LocalDateTime.now()
-                                              .plusHours(2))) {
+        if (newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new ValidationException(
                     "The date and time for which the event is scheduled cannot be earlier than two hours from the current moment");
         }
-        log.info("Add event {}", newEventDto);
-        Category category = categoryRepository.findById(newEventDto.getCategory())
-                                              .get();
-        User initiator = userRepository.findById(userId)
-                                       .get();
+        Category category = categoryRepository.findById(newEventDto.getCategory()).get();
+        User initiator = userRepository.findById(userId).get();
         Event event = EventMapper.mapToEvent(newEventDto, category, initiator);
         event.setState(EventState.PENDING);
         Event savedEvent = eventRepository.saveAndFlush(event);
+        log.info("Add event {}", newEventDto);
         return EventMapper.mapToEventFullDto(savedEvent);
     }
 
@@ -88,8 +82,7 @@ public class EventServiceImpl implements EventService {
         containsUser(userId);
         containsEvent(eventId);
         log.info("Get event with id {}", eventId);
-        return EventMapper.mapToEventFullDto(eventRepository.findById(eventId)
-                              .get());
+        return EventMapper.mapToEventFullDto(eventRepository.findById(eventId).get());
     }
 
     @Override
@@ -98,37 +91,42 @@ public class EventServiceImpl implements EventService {
         containsUser(userId);
         containsEvent(eventId);
         Event event = eventRepository.findById(eventId).get();
-        if (!event.getState().equals(EventState.CANCELED) && !event.getState().equals(EventState.PENDING)) {
-            throw new ConflictException("You can only change canceled events or events in the state of waiting for moderation.");
+        if (!event.getState()
+                  .equals(EventState.CANCELED) && !event.getState()
+                                                        .equals(EventState.PENDING)) {
+            throw new ConflictException(
+                    "You can only change canceled events or events in the state of waiting for moderation.");
         }
-        if (updateEventUserRequest.getStateAction() != null && updateEventUserRequest.getStateAction()
-                                  .equals(EventStateAction.PUBLISH_EVENT)) {
+        if (updateEventUserRequest.getStateAction() != null
+                && updateEventUserRequest.getStateAction()
+                                         .equals(EventStateAction.PUBLISH_EVENT)) {
             throw new ValidationException("You can't update publish event.");
         }
         if (updateEventUserRequest.getEventDate() != null && updateEventUserRequest.getEventDate()
-                                  .isBefore(LocalDateTime.now()
-                                                         .plusHours(2))) {
+                                                                                   .isBefore(
+                                                                                           LocalDateTime.now()
+                                                                                                        .plusHours(
+                                                                                                                2))) {
             throw new ValidationException(
                     "The date and time for which the event is scheduled cannot be earlier than two hours from the current moment");
         }
-        Category category = event.getCategory();
-        if (updateEventUserRequest.getAnnotation() != null && !updateEventUserRequest.getAnnotation().isBlank()) {
+        if (updateEventUserRequest.getAnnotation() != null
+                && !updateEventUserRequest.getAnnotation().isBlank()) {
             event.setAnnotation(updateEventUserRequest.getAnnotation());
         }
         if (updateEventUserRequest.getCategory() != null) {
             event.setCategory(categoryService.getCategory(updateEventUserRequest.getCategory()));
         }
-        if (updateEventUserRequest.getDescription() != null && !updateEventUserRequest.getDescription().isBlank()) {
+        if (updateEventUserRequest.getDescription() != null
+                && !updateEventUserRequest.getDescription().isBlank()) {
             event.setDescription(updateEventUserRequest.getDescription());
         }
         if (updateEventUserRequest.getEventDate() != null) {
             event.setEventDate(updateEventUserRequest.getEventDate());
         }
         if (updateEventUserRequest.getLocation() != null) {
-            event.setLat(updateEventUserRequest.getLocation()
-                                               .getLat());
-            event.setLon(updateEventUserRequest.getLocation()
-                                               .getLon());
+            event.setLat(updateEventUserRequest.getLocation().getLat());
+            event.setLon(updateEventUserRequest.getLocation().getLon());
         }
         if (updateEventUserRequest.getPaid() != null) {
             event.setPaid(updateEventUserRequest.getPaid());
@@ -139,23 +137,29 @@ public class EventServiceImpl implements EventService {
         if (updateEventUserRequest.getRequestModeration() != null) {
             event.setRequestModeration(updateEventUserRequest.getRequestModeration());
         }
-        if (updateEventUserRequest.getTitle() != null && !updateEventUserRequest.getTitle().isBlank()) {
+        if (updateEventUserRequest.getTitle() != null && !updateEventUserRequest.getTitle()
+                                                                                .isBlank()) {
             event.setTitle(updateEventUserRequest.getTitle());
         }
         if (updateEventUserRequest.getStateAction() != null) {
-            if (updateEventUserRequest.getStateAction().equals(EventStateAction.PUBLISH_EVENT)) {
+            if (updateEventUserRequest.getStateAction()
+                                      .equals(EventStateAction.PUBLISH_EVENT)) {
                 event.setState(EventState.PUBLISHED);
             }
-            if (updateEventUserRequest.getStateAction().equals(EventStateAction.REJECT_EVENT) || updateEventUserRequest.getStateAction().equals(EventStateAction.CANCEL_REVIEW)) {
+            if (updateEventUserRequest.getStateAction()
+                                      .equals(EventStateAction.REJECT_EVENT)
+                    || updateEventUserRequest.getStateAction()
+                                             .equals(EventStateAction.CANCEL_REVIEW)) {
                 event.setState(EventState.CANCELED);
             }
-            if (updateEventUserRequest.getStateAction().equals(EventStateAction.SEND_TO_REVIEW)) {
+            if (updateEventUserRequest.getStateAction()
+                                      .equals(EventStateAction.SEND_TO_REVIEW)) {
                 event.setState(EventState.PENDING);
             }
         }
-        log.info("Update event with id {}", eventId);
         eventRepository.saveAndFlush(event);
         EventFullDto eventFullDto = EventMapper.mapToEventFullDto(event);
+        log.info("Update event with id {}", eventId);
         return eventFullDto;
     }
 
@@ -185,7 +189,8 @@ public class EventServiceImpl implements EventService {
                 EventState eventStateForSearch = EventState.valueOf(state);
                 statesForSearch.add(eventStateForSearch);
             }
-            result = eventRepository.searchEventsWithStates(users, statesForSearch, categories, start, end, pageable);
+            result = eventRepository.searchEventsWithStates(users, statesForSearch, categories,
+                    start, end, pageable);
         }
         if (users == null && states != null && categories != null) {
             List<EventState> statesForSearch = new ArrayList<>();
@@ -193,10 +198,12 @@ public class EventServiceImpl implements EventService {
                 EventState eventStateForSearch = EventState.valueOf(state);
                 statesForSearch.add(eventStateForSearch);
             }
-            result = eventRepository.searchEventsWithoutInitiator(statesForSearch, categories, start, end, pageable);
+            result = eventRepository.searchEventsWithoutInitiator(statesForSearch, categories,
+                    start, end, pageable);
         }
         if (users != null && states == null && categories != null) {
-            result = eventRepository.searchEventsWithoutStates(users, categories, start, end, pageable);
+            result = eventRepository.searchEventsWithoutStates(users, categories, start, end,
+                    pageable);
         }
         if (users != null && states != null && categories == null) {
             List<EventState> statesForSearch = new ArrayList<>();
@@ -204,10 +211,12 @@ public class EventServiceImpl implements EventService {
                 EventState eventStateForSearch = EventState.valueOf(state);
                 statesForSearch.add(eventStateForSearch);
             }
-            result = eventRepository.searchEventsWithoutCategory(users, statesForSearch, start, end, pageable);
+            result = eventRepository.searchEventsWithoutCategory(users, statesForSearch, start, end,
+                    pageable);
         }
         if (users == null && states == null && categories != null) {
-            result = eventRepository.searchEventsWithoutInitiatorAndStates(categories, start, end, pageable);
+            result = eventRepository.searchEventsWithoutInitiatorAndStates(categories, start, end,
+                    pageable);
         }
         if (users == null && states != null && categories == null) {
             List<EventState> statesForSearch = new ArrayList<>();
@@ -215,27 +224,31 @@ public class EventServiceImpl implements EventService {
                 EventState eventStateForSearch = EventState.valueOf(state);
                 statesForSearch.add(eventStateForSearch);
             }
-            result = eventRepository.searchEventsWithoutInitiatorAndCategory(statesForSearch, start, end, pageable);
+            result = eventRepository.searchEventsWithoutInitiatorAndCategory(statesForSearch, start,
+                    end, pageable);
         }
         if (users != null && states == null && categories == null) {
-            result = eventRepository.searchEventsWithoutStatesAndCategory(users, start, end, pageable);
+            result = eventRepository.searchEventsWithoutStatesAndCategory(users, start, end,
+                    pageable);
         }
         if (users == null && states == null && categories == null) {
-            result = eventRepository.searchEventsWithoutInitiatorAndStatesAndCategory(start, end, pageable);
+            result = eventRepository.searchEventsWithoutInitiatorAndStatesAndCategory(start, end,
+                    pageable);
         }
-            return result.stream()
-                                   .map(EventMapper::mapToEventFullDto)
-                                   .collect(Collectors.toList());
-        }
+        log.info("Get filtered events.");
+        return result.stream()
+                     .map(EventMapper::mapToEventFullDto)
+                     .collect(Collectors.toList());
+    }
 
     @Override
     public EventFullDto adminEventUpdate(Integer eventId,
             UpdateEventAdminRequest updateEventAdminRequest) {
         containsEvent(eventId);
-        Event event = eventRepository.findById(eventId)
-                                     .get();
+        Event event = eventRepository.findById(eventId).get();
         Event updateEvent = eventUpdater(event, updateEventAdminRequest);
         Event savedEvent = eventRepository.saveAndFlush(updateEvent);
+        log.info("Update event.");
         return EventMapper.mapToEventFullDto(savedEvent);
     }
 
@@ -243,7 +256,8 @@ public class EventServiceImpl implements EventService {
     public List<EventShortDto> getAll(String text, List<Integer> categories, Boolean paid,
             String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort, Integer from,
             Integer size, HttpServletRequest request) {
-        Pageable pageable = PageRequest.of(from, size, Sort.by("EVENT_DATE".equals(sort) ? "eventDate" : "views"));
+        Pageable pageable = PageRequest.of(from, size,
+                Sort.by("EVENT_DATE".equals(sort) ? "eventDate" : "views"));
         LocalDateTime start;
         LocalDateTime end;
         List<Event> events = new ArrayList<>();
@@ -262,39 +276,50 @@ public class EventServiceImpl implements EventService {
         if (start.isAfter(end)) {
             throw new ValidationException("Range end can't be before range start.");
         }
-        if ((text == null || text.isBlank()) && (categories == null || categories.isEmpty()) && paid == null) {
+        if ((text == null || text.isBlank()) && (categories == null || categories.isEmpty())
+                && paid == null) {
             events = eventRepository.findAllWithoutTextAndCategoryAndPaid(start,
                     end, EventState.PUBLISHED, pageable);
-        } else if ((text == null || text.isBlank()) && (categories == null || categories.isEmpty()) && paid != null) {
-            events = eventRepository.findAllWithoutTextAndCategory(paid, start, end, EventState.PUBLISHED, pageable);
-        } else if ((text == null || text.isBlank()) && (categories != null && !categories.isEmpty()) && paid == null) {
+        } else if ((text == null || text.isBlank()) && (categories == null || categories.isEmpty())
+                && paid != null) {
+            events = eventRepository.findAllWithoutTextAndCategory(paid, start, end,
+                    EventState.PUBLISHED, pageable);
+        } else if ((text == null || text.isBlank()) && (categories != null && !categories.isEmpty())
+                && paid == null) {
             events = eventRepository.findAllWithoutTextAndPaid(categories, start,
                     end, EventState.PUBLISHED, pageable);
-        } else if ((text != null && !text.isBlank()) && (categories == null || categories.isEmpty()) && paid == null) {
+        } else if ((text != null && !text.isBlank()) && (categories == null || categories.isEmpty())
+                && paid == null) {
             events = eventRepository.findAllWithoutCategoryAndPaid(text, start,
                     end, EventState.PUBLISHED, pageable);
-        } else if ((text != null && !text.isBlank()) && (categories != null && !categories.isEmpty()) && paid == null) {
+        } else if ((text != null && !text.isBlank()) && (categories != null
+                && !categories.isEmpty()) && paid == null) {
             events = eventRepository.findAllWithFilterWithoutPaid(text, categories, start,
                     end, EventState.PUBLISHED, pageable);
-        } else if ((text != null && !text.isBlank()) && (categories == null || categories.isEmpty()) && paid != null) {
+        } else if ((text != null && !text.isBlank()) && (categories == null || categories.isEmpty())
+                && paid != null) {
             events = eventRepository.findAllWithoutCategory(text, paid, start,
                     end, EventState.PUBLISHED, pageable);
-        } else if ((text == null || text.isBlank()) && (categories != null && !categories.isEmpty()) && paid != null) {
+        } else if ((text == null || text.isBlank()) && (categories != null && !categories.isEmpty())
+                && paid != null) {
             events = eventRepository.findAllWithoutText(categories, paid, start,
                     end, EventState.PUBLISHED, pageable);
-        } else if ((text != null && !text.isBlank()) && (categories != null && !categories.isEmpty()) && paid != null) {
+        } else if ((text != null && !text.isBlank()) && (categories != null
+                && !categories.isEmpty()) && paid != null) {
             events = eventRepository.findAllWithFilter(text, categories, paid, start,
                     end, EventState.PUBLISHED, pageable);
         }
-        List<Event> allEvents = eventRepository.findAll();
         EndpointHitDto endpointHitDto = EndpointHitDto.builder()
-                                                              .app("main_server")
-                                                                      .uri(request.getRequestURI())
-                                                              .ip(request.getRemoteAddr())
-                                                              .timestamp(LocalDateTime.now())
-                                                              .build();
+                                                      .app("main_server")
+                                                      .uri(request.getRequestURI())
+                                                      .ip(request.getRemoteAddr())
+                                                      .timestamp(LocalDateTime.now())
+                                                      .build();
         statClient.addStats(endpointHitDto);
-        return events.stream().map(EventMapper::mapToEventShortDto).collect(Collectors.toList());
+        log.info("Get events.");
+        return events.stream()
+                     .map(EventMapper::mapToEventShortDto)
+                     .collect(Collectors.toList());
     }
 
     @Override
@@ -310,9 +335,12 @@ public class EventServiceImpl implements EventService {
         uris[0] = request.getRequestURI();
         ObjectMapper objectMapper = new ObjectMapper();
         List<ViewStatsDto> viewStatsDtos = objectMapper
-                .convertValue(statClient.getStats(start, end, uris, true).getBody(), new TypeReference<>() {
+                .convertValue(statClient.getStats(start, end, uris, true)
+                                        .getBody(), new TypeReference<>() {
                 });
-        Long sum = viewStatsDtos.stream().map(x -> x.getHits()).reduce(0L, Long::sum);
+        Long sum = viewStatsDtos.stream()
+                                .map(x -> x.getHits())
+                                .reduce(0L, Long::sum);
         event.setViews(Long.valueOf(sum));
         eventRepository.saveAndFlush(event);
         EndpointHitDto endpointHitDto = EndpointHitDto.builder()
@@ -322,6 +350,7 @@ public class EventServiceImpl implements EventService {
                                                       .timestamp(LocalDateTime.now())
                                                       .build();
         statClient.addStats(endpointHitDto);
+        log.info("Get event by id.");
         return EventMapper.mapToEventFullDto(event);
     }
 
@@ -363,10 +392,8 @@ public class EventServiceImpl implements EventService {
             }
         }
         if (updateEventAdminRequest.getLocation() != null) {
-            event.setLat(updateEventAdminRequest.getLocation()
-                                                .getLat());
-            event.setLon(updateEventAdminRequest.getLocation()
-                                                .getLon());
+            event.setLat(updateEventAdminRequest.getLocation().getLat());
+            event.setLon(updateEventAdminRequest.getLocation().getLon());
         }
         if (updateEventAdminRequest.getPaid() != null) {
             event.setPaid(updateEventAdminRequest.getPaid());
@@ -377,35 +404,37 @@ public class EventServiceImpl implements EventService {
         if (updateEventAdminRequest.getRequestModeration() != null) {
             event.setRequestModeration(updateEventAdminRequest.getRequestModeration());
         }
-        if (updateEventAdminRequest.getStateAction() != null && updateEventAdminRequest.getStateAction()
-                                   .equals(EventStateAction.CANCEL_REVIEW)) {
-            if (event.getState()
-                     .equals(EventState.PENDING)) {
+        if (updateEventAdminRequest.getStateAction() != null
+                && updateEventAdminRequest.getStateAction()
+                                          .equals(EventStateAction.CANCEL_REVIEW)) {
+            if (event.getState().equals(EventState.PENDING)) {
                 event.setState(EventState.CANCELED);
             } else {
                 throw new ValidationException(
                         "You can only cancel an event in the moderation waiting state.");
             }
         }
-        if (updateEventAdminRequest.getStateAction() != null && updateEventAdminRequest.getStateAction()
-                                   .equals(EventStateAction.SEND_TO_REVIEW)) {
+        if (updateEventAdminRequest.getStateAction() != null
+                && updateEventAdminRequest.getStateAction()
+                                          .equals(EventStateAction.SEND_TO_REVIEW)) {
             event.setState(EventState.PENDING);
         }
-        if (updateEventAdminRequest.getStateAction() != null && updateEventAdminRequest.getStateAction()
-                                   .equals(EventStateAction.PUBLISH_EVENT)) {
+        if (updateEventAdminRequest.getStateAction() != null
+                && updateEventAdminRequest.getStateAction()
+                                          .equals(EventStateAction.PUBLISH_EVENT)) {
             EventState eventState = event.getState();
             if (eventState.equals(EventState.PUBLISHED)) {
                 throw new ConflictException("The event has already been published.");
             }
-            if (event.getState()
-                     .equals(EventState.CANCELED)) {
+            if (event.getState().equals(EventState.CANCELED)) {
                 throw new ConflictException("The event has been canceled.");
             }
             event.setState(EventState.PUBLISHED);
             event.setPublishedOn(LocalDateTime.now());
         }
-        if (updateEventAdminRequest.getStateAction() != null && updateEventAdminRequest.getStateAction()
-                                   .equals(EventStateAction.REJECT_EVENT)) {
+        if (updateEventAdminRequest.getStateAction() != null
+                && updateEventAdminRequest.getStateAction()
+                                          .equals(EventStateAction.REJECT_EVENT)) {
             if (event.getState()
                      .equals(EventState.PUBLISHED)) {
                 throw new ConflictException("The event has already been published.");

@@ -23,7 +23,8 @@ public class UsersCategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public List<Category> findAllCategories(@RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
+    public List<Category> findAllCategories(
+            @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
             @RequestParam(name = "size", defaultValue = "10") @Positive int size) {
         log.info("Get all categories request.");
         return categoryService.findAllCategories(from, size);

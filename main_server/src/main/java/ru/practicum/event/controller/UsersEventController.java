@@ -32,28 +32,32 @@ public class UsersEventController {
     private final EventService eventService;
 
     @GetMapping("/{userId}/events")
-    public List<Event> getEventsByUserId(@PathVariable @NotNull Integer userId, @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
+    public List<Event> getEventsByUserId(@PathVariable @NotNull Integer userId,
+            @RequestParam(name = "from", defaultValue = "0") @PositiveOrZero int from,
             @RequestParam(name = "size", defaultValue = "10") @Positive int size) {
         log.info("Get events by user id request.");
-        return eventService.getEventsByUserId(userId,from, size);
+        return eventService.getEventsByUserId(userId, from, size);
     }
 
     @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
-    public EventFullDto addEvent(@PathVariable @NotNull Integer userId, @RequestBody @NotNull @Valid NewEventDto newEventDto) {
+    public EventFullDto addEvent(@PathVariable @NotNull Integer userId,
+            @RequestBody @NotNull @Valid NewEventDto newEventDto) {
         log.info("Add event request.");
         return eventService.addEvent(userId, newEventDto);
     }
 
     @GetMapping("/{userId}/events/{eventId}")
-    public EventFullDto getEvent(@PathVariable @NotNull Integer userId, @PathVariable @NotNull Integer eventId) {
+    public EventFullDto getEvent(@PathVariable @NotNull Integer userId,
+            @PathVariable @NotNull Integer eventId) {
         log.info("Get event by event id request.");
         return eventService.getEvent(userId, eventId);
     }
 
     @PatchMapping("/{userId}/events/{eventId}")
-    public EventFullDto updateEvent(@PathVariable @NotNull Integer userId, @PathVariable @NotNull Integer eventId, @RequestBody @NotNull @Valid
-            UpdateEventUserRequest updateEventUserRequest) {
+    public EventFullDto updateEvent(@PathVariable @NotNull Integer userId,
+            @PathVariable @NotNull Integer eventId, @RequestBody @NotNull @Valid
+    UpdateEventUserRequest updateEventUserRequest) {
         log.info("Update event request.");
         return eventService.updateEvent(userId, eventId, updateEventUserRequest);
     }
