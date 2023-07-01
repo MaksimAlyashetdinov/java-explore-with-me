@@ -2,6 +2,7 @@ package ru.practicum;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 @Service
 public class StatClient extends BaseClient {
 
-    public StatClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
+    @Autowired
+    public StatClient(@Value("http://stats-server:9090") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))

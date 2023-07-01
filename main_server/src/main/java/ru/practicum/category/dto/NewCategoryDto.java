@@ -1,7 +1,7 @@
-package ru.practicum;
+package ru.practicum.category.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,10 +14,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ViewStatsDto {
+public class NewCategoryDto {
 
-    String app;
-    String uri;
-    @JsonFormat(shape = Shape.NUMBER_INT)
-    Long hits;
+    @NotNull
+    @Size(min = 1, max = 50)
+    String name;
 }
