@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.ViewStatsDto;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.mapper.EndpointHitMapper;
 import ru.practicum.mapper.ViewStatsMapper;
 import ru.practicum.model.EndpointHit;
@@ -31,6 +32,9 @@ public class StatServiceImpl implements StatService {
     @Override
     public List<ViewStatsDto> findAll(LocalDateTime start, LocalDateTime end, List<String> uris,
             Boolean unique) {
+        if (start.isAfter(end)) {
+            throw new ValidationException("Start can't be after end.");
+        }
         List<ViewStats> viewStatsFromRepository;
         if (unique) {
             viewStatsFromRepository = statRepository.findUniqueViewStats(start, end, uris);
