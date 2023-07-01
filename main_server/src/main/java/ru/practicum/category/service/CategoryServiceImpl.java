@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Category updateCategory(Integer id, NewCategoryDto newCategoryDto) {
         containsCategory(id);
         Category categoryByName = categoryRepository.findByName(newCategoryDto.getName());
-        if (categoryByName != null && categoryByName.getId() != id) {
+        if (categoryByName != null && categoryByName.getId().equals(id)) {
             throw new ConflictException("Category already exist.");
         }
         log.info("Update category with id {} to {}", id, newCategoryDto.getName());
