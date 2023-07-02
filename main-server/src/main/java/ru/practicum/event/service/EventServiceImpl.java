@@ -52,7 +52,7 @@ public class EventServiceImpl implements EventService {
             "yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public List<Event> getEventsByUserId(Integer userId, int from, int size) {
+    public List<Event> getEventsByUserId(Long userId, int from, int size) {
         containsUser(userId);
         Pageable pageable = PageRequest.of(from, size);
         log.info("Get events by user id {}", userId);
@@ -62,7 +62,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto addEvent(Integer userId, NewEventDto newEventDto) {
+    public EventFullDto addEvent(Long userId, NewEventDto newEventDto) {
         containsUser(userId);
         if (newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new ValidationException(
@@ -78,7 +78,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getEvent(Integer userId, Integer eventId) {
+    public EventFullDto getEvent(Long userId, Long eventId) {
         containsUser(userId);
         containsEvent(eventId);
         log.info("Get event with id {}", eventId);
@@ -86,7 +86,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto updateEvent(Integer userId, Integer eventId,
+    public EventFullDto updateEvent(Long userId, Long eventId,
             UpdateEventUserRequest updateEventUserRequest) {
         containsUser(userId);
         containsEvent(eventId);
@@ -164,8 +164,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getFilteredEvents(List<Integer> users, List<String> states,
-            List<Integer> categories, String rangeStart, String rangeEnd, Integer from,
+    public List<EventFullDto> getFilteredEvents(List<Long> users, List<String> states,
+            List<Long> categories, String rangeStart, String rangeEnd, Integer from,
             Integer size) {
         LocalDateTime start;
         LocalDateTime end;
@@ -242,7 +242,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto adminEventUpdate(Integer eventId,
+    public EventFullDto adminEventUpdate(Long eventId,
             UpdateEventAdminRequest updateEventAdminRequest) {
         containsEvent(eventId);
         Event event = eventRepository.findById(eventId).get();
@@ -253,7 +253,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getAll(String text, List<Integer> categories, Boolean paid,
+    public List<EventShortDto> getAll(String text, List<Long> categories, Boolean paid,
             String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort, Integer from,
             Integer size, HttpServletRequest request) {
         Pageable pageable = PageRequest.of(from, size,
@@ -323,7 +323,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getByIdWithCount(Integer id, HttpServletRequest request) {
+    public EventFullDto getByIdWithCount(Long id, HttpServletRequest request) {
         containsEvent(id);
         Event event = eventRepository.findById(id).get();
         if (!event.getState().equals(EventState.PUBLISHED)) {
@@ -354,13 +354,13 @@ public class EventServiceImpl implements EventService {
         return EventMapper.mapToEventFullDto(event);
     }
 
-    private void containsUser(Integer userId) {
+    private void containsUser(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("User with id " + userId + " not found.");
         }
     }
 
-    private void containsEvent(Integer eventId) {
+    private void containsEvent(Long eventId) {
         if (!eventRepository.existsById(eventId)) {
             throw new NotFoundException("Event with id " + eventId + " not found.");
         }

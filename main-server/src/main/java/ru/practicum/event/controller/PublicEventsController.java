@@ -25,7 +25,7 @@ public class PublicEventsController {
     @GetMapping
     public List<EventShortDto> getEvents(
             @RequestParam(required = false) String text,
-            @RequestParam(required = false) List<Integer> categories,
+            @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) Boolean paid,
             @RequestParam(required = false) String rangeStart,
             @RequestParam(required = false) String rangeEnd,
@@ -40,7 +40,7 @@ public class PublicEventsController {
     }
 
     @GetMapping("/{id}")
-    public EventFullDto getEventById(@PathVariable Integer id, HttpServletRequest request) {
+    public EventFullDto getEventById(@PathVariable Long id, HttpServletRequest request) {
         log.info("Get event by id request.");
         return eventService.getByIdWithCount(id, request);
     }

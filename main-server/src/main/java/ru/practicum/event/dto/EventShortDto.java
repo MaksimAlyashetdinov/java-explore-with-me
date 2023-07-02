@@ -14,7 +14,7 @@ import ru.practicum.user.dto.UserShortDto;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventShortDto {
 
-    Integer id;
+    Long id;
     String annotation;
     CategoryDto category;
     Integer confirmedRequests;

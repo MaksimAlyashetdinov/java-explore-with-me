@@ -8,7 +8,7 @@ public interface UserService {
 
     User addUser(NewUserRequest newUserRequest);
 
-    List<User> getUsers(List<Integer> ids, int from, int size);
+    List<User> getUsers(List<Long> ids, int from, int size);
 
-    void deleteUser(Integer id);
+    void deleteUser(Long id);
 }

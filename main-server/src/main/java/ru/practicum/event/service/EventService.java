@@ -11,25 +11,25 @@ import ru.practicum.event.model.Event;
 
 public interface EventService {
 
-    List<Event> getEventsByUserId(Integer userId, int from, int size);
+    List<Event> getEventsByUserId(Long userId, int from, int size);
 
-    EventFullDto addEvent(Integer userId, NewEventDto newEventDto);
+    EventFullDto addEvent(Long userId, NewEventDto newEventDto);
 
-    EventFullDto getEvent(Integer userId, Integer eventId);
+    EventFullDto getEvent(Long userId, Long eventId);
 
-    EventFullDto updateEvent(Integer userId, Integer eventId,
+    EventFullDto updateEvent(Long userId, Long eventId,
             UpdateEventUserRequest updateEventUserRequest);
 
-    List<EventFullDto> getFilteredEvents(List<Integer> users, List<String> states,
-            List<Integer> categories, String rangeStart, String rangeEnd, Integer from,
+    List<EventFullDto> getFilteredEvents(List<Long> users, List<String> states,
+            List<Long> categories, String rangeStart, String rangeEnd, Integer from,
             Integer size);
 
-    EventFullDto adminEventUpdate(Integer eventId, UpdateEventAdminRequest updateEventAdminRequest);
+    EventFullDto adminEventUpdate(Long eventId, UpdateEventAdminRequest updateEventAdminRequest);
 
-    List<EventShortDto> getAll(String text, List<Integer> categories, Boolean paid,
+    List<EventShortDto> getAll(String text, List<Long> categories, Boolean paid,
             String rangeStart, String rangeEnd, Boolean onlyAvailable, String sort, Integer from,
             Integer size,
             HttpServletRequest request);
 
-    EventFullDto getByIdWithCount(Integer id, HttpServletRequest request);
+    EventFullDto getByIdWithCount(Long id, HttpServletRequest request);
 }

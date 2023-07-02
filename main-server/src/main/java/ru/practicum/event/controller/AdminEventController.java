@@ -26,9 +26,9 @@ public class AdminEventController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventFullDto> getFilteredEvents(@RequestParam(required = false) List<Integer> users,
+    public List<EventFullDto> getFilteredEvents(@RequestParam(required = false) List<Long> users,
             @RequestParam(required = false) List<String> states,
-            @RequestParam(required = false) List<Integer> categories,
+            @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) String rangeStart,
             @RequestParam(required = false) String rangeEnd,
             @Positive @RequestParam(defaultValue = "0") Integer from,
@@ -39,7 +39,7 @@ public class AdminEventController {
     }
 
     @PatchMapping("/{eventId}")
-    public EventFullDto adminEventUpdate(@Positive @PathVariable Integer eventId,
+    public EventFullDto adminEventUpdate(@Positive @PathVariable Long eventId,
             @RequestBody @Validated UpdateEventAdminRequest updateEventAdminRequest) {
         log.info("Update event request.");
         return eventService.adminEventUpdate(eventId, updateEventAdminRequest);

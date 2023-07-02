@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsers(List<Integer> ids, int from, int size) {
+    public List<User> getUsers(List<Long> ids, int from, int size) {
         Pageable pageable = PageRequest.of(from, size);
         List<User> result = new ArrayList<>();
         if (ids == null) {
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(Integer id) {
+    public void deleteUser(Long id) {
         containsUser(id);
         User user = userRepository.findById(id)
                                   .get();
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
     }
 
-    private void containsUser(Integer id) {
+    private void containsUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new NotFoundException("User with id " + id + " not found.");
         }
