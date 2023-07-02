@@ -12,7 +12,7 @@
 
     <name>Explore With Me</name>
     <modules>
-        <module>main_server</module>
+        <module>main-server</module>
         <module>stat</module>
     </modules>
 
