@@ -31,7 +31,7 @@ public class UsersCategoryController {
     }
 
     @GetMapping("/{catId}")
-    public Category findCategoryById(@PathVariable @NotNull Integer catId) {
+    public Category findCategoryById(@PathVariable @NotNull Long catId) {
         log.info("Get category with id {} request.", catId);
         return categoryService.getCategory(catId);
     }

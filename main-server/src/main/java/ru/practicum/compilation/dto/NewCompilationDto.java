@@ -19,6 +19,7 @@ public class NewCompilationDto {
 
     Integer id;
     List<Integer> events;
+    @Builder.Default
     Boolean pinned = false;
     @Size(min = 1, max = 50)
     @NotBlank

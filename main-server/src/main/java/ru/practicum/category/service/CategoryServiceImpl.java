@@ -30,14 +30,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void deleteCategory(Integer id) {
+    public void deleteCategory(Long id) {
         containsCategory(id);
         log.info("Delete category with id {}", id);
         categoryRepository.deleteById(id);
     }
 
     @Override
-    public Category updateCategory(Integer id, NewCategoryDto newCategoryDto) {
+    public Category updateCategory(Long id, NewCategoryDto newCategoryDto) {
         containsCategory(id);
         Category categoryByName = categoryRepository.findByName(newCategoryDto.getName());
         if (categoryByName != null && !categoryByName.getId().equals(id)) {
@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategory(Integer id) {
+    public Category getCategory(Long id) {
         containsCategory(id);
         log.info("Get category with id {}.", id);
         return categoryRepository.findById(id).get();
@@ -75,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    private void containsCategory(Integer id) {
+    private void containsCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new NotFoundException("The category with this id was not found.");
         }

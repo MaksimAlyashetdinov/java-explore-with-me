@@ -8,11 +8,11 @@ public interface CategoryService {
 
     Category addCategory(NewCategoryDto newCategoryDto);
 
-    void deleteCategory(Integer id);
+    void deleteCategory(Long id);
 
-    Category updateCategory(Integer id, NewCategoryDto categoryDto);
+    Category updateCategory(Long id, NewCategoryDto categoryDto);
 
     List<Category> findAllCategories(int from, int size);
 
-    Category getCategory(Integer id);
+    Category getCategory(Long id);
 }

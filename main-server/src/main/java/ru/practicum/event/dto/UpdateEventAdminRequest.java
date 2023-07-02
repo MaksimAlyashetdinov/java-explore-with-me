@@ -24,7 +24,7 @@ public class UpdateEventAdminRequest {
 
     @Size(min = 20, max = 2000)
     String annotation;
-    Integer category;
+    Long category;
     @Size(min = 20, max = 7000)
     String description;
     @FutureOrPresent
