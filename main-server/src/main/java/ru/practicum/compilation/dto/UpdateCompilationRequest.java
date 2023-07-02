@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateCompilationRequest {
 
-    List<Integer> events;
+    List<Long> events;
     Boolean pinned;
     @Size(min = 1, max = 50)
     String title;

@@ -33,7 +33,7 @@ public class RequestServiceImpl implements RequestService {
     private final EventRepository eventRepository;
 
     @Override
-    public List<ParticipationRequestDto> getEventsWithUserRequest(Integer userId, Integer eventId) {
+    public List<ParticipationRequestDto> getEventsWithUserRequest(Long userId, Long eventId) {
         containsUser(userId);
         containsEvent(eventId);
         log.info("Get requests for event with id {}", eventId);
@@ -45,7 +45,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public EventRequestStatusUpdateResult updateRequestStatus(Integer userId, Integer eventId,
+    public EventRequestStatusUpdateResult updateRequestStatus(Long userId, Long eventId,
             EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         containsUser(userId);
         containsEvent(eventId);
@@ -87,7 +87,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<ParticipationRequestDto> getUserRequests(Integer userId) {
+    public List<ParticipationRequestDto> getUserRequests(Long userId) {
         containsUser(userId);
         List<Request> userRequests = requestRepository.findByRequesterId(userId);
         log.info("Get user requests.");
@@ -97,7 +97,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public ParticipationRequestDto create(Integer userId, Integer eventId) {
+    public ParticipationRequestDto create(Long userId, Long eventId) {
         containsUser(userId);
         containsEvent(eventId);
         Event event = eventRepository.findById(eventId).get();
@@ -137,7 +137,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public ParticipationRequestDto cancel(Integer userId, Integer requestId) {
+    public ParticipationRequestDto cancel(Long userId, Long requestId) {
         containsUser(userId);
         containsRequest(requestId);
         Request request = requestRepository.findById(requestId).get();
@@ -147,19 +147,19 @@ public class RequestServiceImpl implements RequestService {
         return RequestMapper.mapToParticipationRequestDto(savedRequest);
     }
 
-    private void containsUser(Integer userId) {
+    private void containsUser(Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new NotFoundException("User with id " + userId + " not found.");
         }
     }
 
-    private void containsEvent(Integer eventId) {
+    private void containsEvent(Long eventId) {
         if (!eventRepository.existsById(eventId)) {
             throw new NotFoundException("Event with id " + eventId + " not found.");
         }
     }
 
-    private void containsRequest(Integer requestId) {
+    private void containsRequest(Long requestId) {
         if (!requestRepository.existsById(requestId)) {
             throw new ValidationException("Request with id " + requestId + " not found.");
         }

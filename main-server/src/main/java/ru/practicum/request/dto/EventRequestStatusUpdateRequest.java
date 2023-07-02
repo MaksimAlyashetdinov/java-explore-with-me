@@ -12,6 +12,6 @@ import ru.practicum.request.StateRequest;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EventRequestStatusUpdateRequest {
 
-    List<Integer> requestIds;
+    List<Long> requestIds;
     StateRequest status;
 }

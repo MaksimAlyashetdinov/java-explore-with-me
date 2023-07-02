@@ -12,9 +12,9 @@ public interface CompilationService {
 
     List<Compilation> getAll(Boolean pinned, Integer from, Integer size);
 
-    Compilation getById(Integer compId);
+    Compilation getById(Long compId);
 
-    void deleteById(Integer compId);
+    void deleteById(Long compId);
 
-    Compilation update(Integer compId, UpdateCompilationRequest updateCompilationRequest);
+    Compilation update(Long compId, UpdateCompilationRequest updateCompilationRequest);
 }

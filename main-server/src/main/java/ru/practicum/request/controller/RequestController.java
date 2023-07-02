@@ -29,23 +29,23 @@ public class RequestController {
     private final RequestService requestService;
 
     @GetMapping("/{userId}/requests")
-    public List<ParticipationRequestDto> getUserRequests(@PathVariable Integer userId) {
+    public List<ParticipationRequestDto> getUserRequests(@PathVariable Long userId) {
         log.info("Get user requests.");
         return requestService.getUserRequests(userId);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{userId}/requests")
-    public ParticipationRequestDto addUserRequest(@Positive @PathVariable Integer userId,
-            @RequestParam @Positive Integer eventId) {
+    public ParticipationRequestDto addUserRequest(@Positive @PathVariable Long userId,
+            @RequestParam @Positive Long eventId) {
         log.info("Add new request.");
         return requestService.create(userId, eventId);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{userId}/events/{eventId}/requests")
-    public EventRequestStatusUpdateResult updateRequest(@Positive @PathVariable Integer userId,
-            @Positive @PathVariable Integer eventId,
+    public EventRequestStatusUpdateResult updateRequest(@Positive @PathVariable Long userId,
+            @Positive @PathVariable Long eventId,
             @RequestBody(required = false) @Validated
             EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
         log.info("Update request.");
@@ -55,15 +55,15 @@ public class RequestController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{userId}/events/{eventId}/requests")
     public List<ParticipationRequestDto> getEventsWithUserRequest(
-            @Positive @PathVariable Integer userId,
-            @Positive @PathVariable Integer eventId) {
+            @Positive @PathVariable Long userId,
+            @Positive @PathVariable Long eventId) {
         log.info("Get events with user request.");
         return requestService.getEventsWithUserRequest(userId, eventId);
     }
 
     @PatchMapping("/{userId}/requests/{requestId}/cancel")
-    public ParticipationRequestDto deleteUserRequest(@PathVariable Integer userId,
-            @PathVariable Integer requestId) {
+    public ParticipationRequestDto deleteUserRequest(@PathVariable Long userId,
+            @PathVariable Long requestId) {
         log.info("Delete request.");
         return requestService.cancel(userId, requestId);
     }

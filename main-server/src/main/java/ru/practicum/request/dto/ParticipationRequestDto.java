@@ -17,10 +17,10 @@ import ru.practicum.request.StateRequest;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ParticipationRequestDto {
 
-    Integer id;
+    Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime created;
-    Integer event;
-    Integer requester;
+    Long event;
+    Long requester;
     StateRequest status;
 }

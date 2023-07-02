@@ -6,15 +6,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.request.StateRequest;
 import ru.practicum.request.model.Request;
 
-public interface RequestRepository extends JpaRepository<Request, Integer> {
+public interface RequestRepository extends JpaRepository<Request, Long> {
 
-    public List<Request> findByEventId(Integer eventId);
+    public List<Request> findByEventId(Long eventId);
 
-    public List<Request> findByEventIdAndStatus(Integer eventId, StateRequest status);
+    public List<Request> findByEventIdAndStatus(Long eventId, StateRequest status);
 
-    List<Request> findAllByIdIn(List<Integer> ids);
+    List<Request> findAllByIdIn(List<Long> ids);
 
-    List<Request> findByRequesterId(Integer requesterId);
+    List<Request> findByRequesterId(Long requesterId);
 
-    Optional<Request> findByRequesterIdAndEventId(Integer requesterId, Integer eventId);
+    Optional<Request> findByRequesterIdAndEventId(Long requesterId, Long eventId);
 }

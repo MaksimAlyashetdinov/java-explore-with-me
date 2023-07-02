@@ -32,7 +32,7 @@ public class Request {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
     @ManyToOne
     @JoinColumn(name = "requester_id")
     User requester;

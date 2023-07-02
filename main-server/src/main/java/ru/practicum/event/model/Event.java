@@ -35,7 +35,7 @@ public class Event {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    Long id;
     @Size(min = 20, max = 2000)
     @Column(name = "annotation")
     String annotation;

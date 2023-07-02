@@ -31,7 +31,7 @@ public class PublicCompilationsController {
     }
 
     @GetMapping("/{compId}")
-    public CompilationDto getCompilations(@PathVariable Integer compId) {
+    public CompilationDto getCompilations(@PathVariable Long compId) {
         return CompilationMapper.toCompilationDto(compilationService.getById(compId));
     }
 }

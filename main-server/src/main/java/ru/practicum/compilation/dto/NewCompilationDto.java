@@ -17,8 +17,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewCompilationDto {
 
-    Integer id;
-    List<Integer> events;
+    Long id;
+    List<Long> events;
     @Builder.Default
     Boolean pinned = false;
     @Size(min = 1, max = 50)

@@ -48,19 +48,19 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public Compilation getById(Integer compId) {
+    public Compilation getById(Long compId) {
         return compilationRepository.findById(compId)
                                     .orElseThrow(() -> new NotFoundException(
                                             "Compilation with id " + compId + " not found."));
     }
 
     @Override
-    public void deleteById(Integer compId) {
+    public void deleteById(Long compId) {
         compilationRepository.deleteById(compId);
     }
 
     @Override
-    public Compilation update(Integer compId, UpdateCompilationRequest updateCompilationRequest) {
+    public Compilation update(Long compId, UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilation = getById(compId);
         if (updateCompilationRequest.getEvents() != null && !updateCompilationRequest.getEvents()
                                                                                      .isEmpty()) {

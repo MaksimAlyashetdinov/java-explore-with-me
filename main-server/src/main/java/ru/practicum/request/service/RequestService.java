@@ -7,14 +7,14 @@ import ru.practicum.request.dto.ParticipationRequestDto;
 
 public interface RequestService {
 
-    List<ParticipationRequestDto> getEventsWithUserRequest(Integer userId, Integer eventId);
+    List<ParticipationRequestDto> getEventsWithUserRequest(Long userId, Long eventId);
 
-    EventRequestStatusUpdateResult updateRequestStatus(Integer userId, Integer eventId,
+    EventRequestStatusUpdateResult updateRequestStatus(Long userId, Long eventId,
             EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest);
 
-    List<ParticipationRequestDto> getUserRequests(Integer userId);
+    List<ParticipationRequestDto> getUserRequests(Long userId);
 
-    ParticipationRequestDto create(Integer userId, Integer eventId);
+    ParticipationRequestDto create(Long userId, Long eventId);
 
-    ParticipationRequestDto cancel(Integer userId, Integer requestId);
+    ParticipationRequestDto cancel(Long userId, Long requestId);
 }
