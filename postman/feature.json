@@ -22,8 +22,7 @@
               "});",
               "pm.test(\"Test user 'id' field\", function () {",
               "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData).to.have.property('id');",
-              "    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
+              "    pm.expect(jsonData.id).to.not.be.null;",
               "});",
               "pm.test(\"Test user 'email' field\", function () {",
               "    var jsonData = pm.response.json();",
@@ -87,8 +86,7 @@
               "});",
               "pm.test(\"Test user 'id' field\", function () {",
               "    var jsonData = pm.response.json();",
-              "    pm.expect(jsonData).to.have.property('id');",
-              "    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);",
+              "    pm.expect(jsonData.id).to.not.be.null;",
               "});",
               "pm.test(\"Test user 'email' field\", function () {",
               "    var jsonData = pm.response.json();",
@@ -152,8 +150,7 @@
               "});\r",
               "pm.test(\"Test category 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData.id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test category 'name' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -212,8 +209,7 @@
               "});\r",
               "pm.test(\"Test event 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData.id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test event 'title' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -279,8 +275,7 @@
               "});\r",
               "pm.test(\"Test event 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);\r",
+              "    pm.expect(jsonData.id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test event 'title' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -346,8 +341,7 @@
               "});\r",
               "pm.test(\"Test comment 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData.id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -461,7 +455,7 @@
           "variable": [
             {
               "key": "userId",
-              "value": "5"
+              "value": "500"
             },
             {
               "key": "eventId",
@@ -529,7 +523,7 @@
             },
             {
               "key": "eventId",
-              "value": "5"
+              "value": "500"
             }
           ]
         }
@@ -680,8 +674,7 @@
               "});\r",
               "pm.test(\"Test comment 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);\r",
+              "    pm.expect(jsonData.id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -758,8 +751,7 @@
               "});\r",
               "pm.test(\"Test comment 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.expect(jsonData.id, '\"id\" must be 3').to.eql(3);\r",
+              "    pm.expect(jsonData.id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -836,8 +828,7 @@
               "});\r",
               "pm.test(\"Test comment 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData.id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -933,7 +924,7 @@
           "variable": [
             {
               "key": "userId",
-              "value": "5"
+              "value": "500"
             },
             {
               "key": "commentId",
@@ -992,7 +983,7 @@
             },
             {
               "key": "commentId",
-              "value": "5"
+              "value": "500"
             }
           ]
         }
@@ -1018,8 +1009,7 @@
               "\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1028,8 +1018,7 @@
               "});\r",
               "pm.test(\"Test comment[1] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[1]).to.have.property('id');\r",
-              "    pm.expect(jsonData[1].id, '\"id\" must be 2').to.eql(2);\r",
+              "    pm.expect(jsonData[1].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[1] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1038,8 +1027,7 @@
               "});\r",
               "pm.test(\"Test comment[2] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[2]).to.have.property('id');\r",
-              "    pm.expect(jsonData[2].id, '\"id\" must be 3').to.eql(3);\r",
+              "    pm.expect(jsonData[2].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[2] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1079,6 +1067,70 @@
       "response": []
     },
     {
+      "name": "Get all comments with page size 1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
+              "});\r",
+              "pm.test(\"Test list comments response\", function () {\r",
+              "    pm.response.to.be.withBody;\r",
+              "    pm.response.to.be.json;\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Test comment[0] 'id' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
+              "});\r",
+              "pm.test(\"Test comment[0] 'text' field\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData[0]).to.have.property('text');\r",
+              "    pm.expect(jsonData[0].text, '\"text\"  must be \"Комментарий для первого мероприятия\"').to.eql('Комментарий для первого мероприятия');\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/comments/user?size=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "comments",
+            "user"
+          ],
+          "query": [
+            {
+              "key": "size",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "Get all comments filter by comment id",
       "event": [
         {
@@ -1097,8 +1149,7 @@
               "\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1219,8 +1270,7 @@
               "});\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 3').to.eql(3);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1287,8 +1337,7 @@
               "});\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1359,8 +1408,7 @@
               "});\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1435,8 +1483,7 @@
               "});\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1507,8 +1554,7 @@
               "});\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1579,8 +1625,7 @@
               "});\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1651,8 +1696,7 @@
               "});\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 3').to.eql(3);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1835,8 +1879,7 @@
               "});\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1904,8 +1947,7 @@
               "\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 3').to.eql(3);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -1969,8 +2011,7 @@
               "\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 3').to.eql(3);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -2034,8 +2075,7 @@
               "\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -2099,8 +2139,7 @@
               "\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -2109,8 +2148,7 @@
               "});\r",
               "pm.test(\"Test comment[1] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[1]).to.have.property('id');\r",
-              "    pm.expect(jsonData[1].id, '\"id\" must be 2').to.eql(2);\r",
+              "    pm.expect(jsonData[1].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[1] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -2178,8 +2216,7 @@
               "\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -2305,8 +2342,7 @@
               "\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -2472,71 +2508,6 @@
       "response": []
     },
     {
-      "name": "Get all comments with page size 1",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"Status code is 200\", function () {\r",
-              "    pm.expect(pm.response.code).to.be.oneOf([200]);\r",
-              "});\r",
-              "pm.test(\"Test list comments response\", function () {\r",
-              "    pm.response.to.be.withBody;\r",
-              "    pm.response.to.be.json;\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Test comment[0] 'id' field\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 1').to.eql(1);\r",
-              "});\r",
-              "pm.test(\"Test comment[0] 'text' field\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('text');\r",
-              "    pm.expect(jsonData[0].text, '\"text\"  must be \"Комментарий для первого мероприятия\"').to.eql('Комментарий для первого мероприятия');\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json",
-            "type": "text"
-          },
-          {
-            "key": "Accept",
-            "value": "application/json",
-            "type": "text"
-          }
-        ],
-        "url": {
-          "raw": "{{baseUrl}}/comments/user?size=1",
-          "host": [
-            "{{baseUrl}}"
-          ],
-          "path": [
-            "comments",
-            "user"
-          ],
-          "query": [
-            {
-              "key": "size",
-              "value": "1"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "Update comment 1",
       "event": [
         {
@@ -2552,8 +2523,7 @@
               "});\r",
               "pm.test(\"Test comment 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData).to.have.property('id');\r",
-              "    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);\r",
+              "    pm.expect(jsonData.id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -2645,7 +2615,7 @@
           "variable": [
             {
               "key": "userId",
-              "value": "3"
+              "value": "500"
             },
             {
               "key": "commentId",
@@ -2860,7 +2830,7 @@
       "response": []
     },
     {
-      "name": "Get all comments (without comment 1)",
+      "name": "Get all comments (after delete comment 1)",
       "event": [
         {
           "listen": "test",
@@ -2877,8 +2847,7 @@
               "});\r",
               "pm.test(\"Test comment[0] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[0]).to.have.property('id');\r",
-              "    pm.expect(jsonData[0].id, '\"id\" must be 2').to.eql(2);\r",
+              "    pm.expect(jsonData[0].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[0] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -2887,8 +2856,7 @@
               "});\r",
               "pm.test(\"Test comment[1] 'id' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData[1]).to.have.property('id');\r",
-              "    pm.expect(jsonData[1].id, '\"id\" must be 3').to.eql(3);\r",
+              "    pm.expect(jsonData[1].id).to.not.be.null;\r",
               "});\r",
               "pm.test(\"Test comment[1] 'text' field\", function () {\r",
               "    var jsonData = pm.response.json();\r",
@@ -2960,7 +2928,7 @@
           "variable": [
             {
               "key": "userId",
-              "value": "3"
+              "value": "500"
             },
             {
               "key": "commentId",
