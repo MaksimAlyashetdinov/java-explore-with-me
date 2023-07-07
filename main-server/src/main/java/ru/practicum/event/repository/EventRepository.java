@@ -31,7 +31,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "e.eventDate between :start and :end and " +
             "e.state = :state and " +
             "(e.annotation like %:text% or e.description like %:text%)")
-    List<Event> findAllWithFilter(String text, List<Long> categories, Boolean paid,
+    List<Event> findWithFilter(String text, List<Long> categories, Boolean paid,
             LocalDateTime start,
             LocalDateTime end, EventState state, Pageable pageable);
 
@@ -70,7 +70,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "e.paid = :paid and " +
             "e.eventDate between :start and :end and " +
             "e.state = :state")
-    List<Event> findAllWithoutText(List<Long> categories, Boolean paid, LocalDateTime start,
+    List<Event> findWithoutText(List<Long> categories, Boolean paid, LocalDateTime start,
             LocalDateTime end, EventState state, Pageable pageable);
 
     @Query("SELECT e from Event e " +
@@ -78,34 +78,34 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "e.eventDate between :start and :end and " +
             "e.state = :state and " +
             "(e.annotation like %:text% or e.description like %:text%)")
-    List<Event> findAllWithoutCategory(String text, Boolean paid, LocalDateTime start,
+    List<Event> findWithoutCategory(String text, Boolean paid, LocalDateTime start,
             LocalDateTime end, EventState state, Pageable pageable);
 
     @Query("SELECT e from Event e " +
             "where e.paid = :paid and " +
             "e.eventDate between :start and :end and " +
             "e.state = :state")
-    List<Event> findAllWithoutTextAndCategory(Boolean paid, LocalDateTime start,
+    List<Event> findWithoutTextAndCategory(Boolean paid, LocalDateTime start,
             LocalDateTime end, EventState state, Pageable pageable);
 
     @Query("SELECT e from Event e " +
             "where e.eventDate between :start and :end and " +
             "e.state = :state")
-    List<Event> findAllWithoutTextAndCategoryAndPaid(LocalDateTime start,
+    List<Event> findWithoutTextAndCategoryAndPaid(LocalDateTime start,
             LocalDateTime end, EventState state, Pageable pageable);
 
     @Query("SELECT e from Event e " +
             "where e.category.id IN :categories and " +
             "e.eventDate between :start and :end and " +
             "e.state = :state")
-    List<Event> findAllWithoutTextAndPaid(List<Long> categories, LocalDateTime start,
+    List<Event> findWithoutTextAndPaid(List<Long> categories, LocalDateTime start,
             LocalDateTime end, EventState state, Pageable pageable);
 
     @Query("SELECT e from Event e " +
             "where e.eventDate between :start and :end and " +
             "e.state = :state and " +
             "(e.annotation like %:text% or e.description like %:text%)")
-    List<Event> findAllWithoutCategoryAndPaid(String text, LocalDateTime start,
+    List<Event> findWithoutCategoryAndPaid(String text, LocalDateTime start,
             LocalDateTime end, EventState state, Pageable pageable);
 
     @Query("SELECT e from Event e " +
@@ -113,6 +113,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "e.eventDate between :start and :end and " +
             "e.state = :state and " +
             "(e.annotation like %:text% or e.description like %:text%)")
-    List<Event> findAllWithFilterWithoutPaid(String text, List<Long> categories, LocalDateTime start,
+    List<Event> findWithFilterWithoutPaid(String text, List<Long> categories, LocalDateTime start,
             LocalDateTime end, EventState state, Pageable pageable);
 }

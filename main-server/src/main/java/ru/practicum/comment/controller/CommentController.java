@@ -2,6 +2,9 @@ package ru.practicum.comment.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.comment.dto.NewComment;
+import ru.practicum.comment.dto.UpdateComment;
 import ru.practicum.comment.model.Comment;
 import ru.practicum.comment.service.CommentService;
+import ru.practicum.comment.util.Filter;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -36,9 +40,9 @@ public class CommentController {
     @ResponseStatus(HttpStatus.CREATED)
     public Comment addComment(@PathVariable @NotNull @Positive Long userId,
                               @PathVariable @NotNull @Positive Long eventId,
-                              @RequestBody @NotNull @Valid NewComment newComment) {
+                              @RequestBody @NotNull String text) {
         log.info("Add comment request.");
-        return commentService.addComment(userId, eventId, newComment);
+        return commentService.addComment(new NewComment(userId, eventId, text));
     }
 
     @GetMapping("/{userId}/comment/{commentId}")
@@ -60,15 +64,17 @@ public class CommentController {
         @Min(0) @RequestParam(defaultValue = "0") Integer from,
         @Min(1) @RequestParam(defaultValue = "10") Integer size) {
         log.info("Get comments request.");
-        return commentService.getComments(comments, users, events, text, rangeStart, rangeEnd, sort, from, size);
+        Pageable pageable = PageRequest.of(from, size,
+            Sort.by("created".equals(sort) ? "created" : "event_id"));
+        return commentService.getComments(new Filter(comments, users, events, text, rangeStart, rangeEnd, sort), pageable);
     }
 
     @PatchMapping("/{userId}/comment/{commentId}")
     public Comment updateComment(@PathVariable @NotNull @Positive Long userId,
                                  @PathVariable @NotNull @Positive Long commentId,
-                                 @RequestBody @NotNull @Valid NewComment newComment) {
+                                 @RequestBody @NotNull String text) {
         log.info("Update comment request.");
-        return commentService.updateComment(userId, commentId, newComment);
+        return commentService.updateComment(new UpdateComment(commentId, userId, text));
     }
 
     @DeleteMapping("/{userId}/comment/{commentId}")

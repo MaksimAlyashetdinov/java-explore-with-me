@@ -1,21 +1,22 @@
 package ru.practicum.comment.service;
 
+import org.springframework.data.domain.Pageable;
 import ru.practicum.comment.dto.NewComment;
+import ru.practicum.comment.dto.UpdateComment;
 import ru.practicum.comment.model.Comment;
+import ru.practicum.comment.util.Filter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommentService {
 
-    Comment addComment(Long userId, Long eventId, NewComment newComment);
+    Comment addComment(NewComment newComment);
 
     Comment getCommentById(Long userId, Long commentId);
 
-    List<Comment> getComments(List<Long> commentsIds, List<Long> userIds, List<Long> eventIds, String text,
-                              LocalDateTime start, LocalDateTime end, String sort, int from, int size);
+    List<Comment> getComments(Filter filter, Pageable pageable);
 
-    Comment updateComment(Long userId, Long commentId, NewComment newComment);
+    Comment updateComment(UpdateComment updateComment);
 
     void deleteComment(Long userId, Long commentId);
 }

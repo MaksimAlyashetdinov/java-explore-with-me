@@ -2,14 +2,14 @@ package ru.practicum.comment.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.comment.dto.NewComment;
+import ru.practicum.comment.dto.UpdateComment;
 import ru.practicum.comment.mapper.CommentMapper;
 import ru.practicum.comment.model.Comment;
 import ru.practicum.comment.repository.CommentRepository;
+import ru.practicum.comment.util.Filter;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.ConflictException;
@@ -32,14 +32,14 @@ public class CommentServiceImpl implements CommentService {
     private final EventRepository eventRepository;
 
     @Override
-    public Comment addComment(Long userId, Long eventId, NewComment newComment) {
-        containsUser(userId);
-        containsEvent(eventId);
+    public Comment addComment(NewComment newComment) {
+        containsUser(newComment.getInitiatorId());
+        containsEvent(newComment.getEventId());
         validateComment(newComment);
-        User initiator = userRepository.findById(userId).get();
-        Event event = eventRepository.findById(eventId).get();
+        User initiator = userRepository.findById(newComment.getInitiatorId()).get();
+        Event event = eventRepository.findById(newComment.getEventId()).get();
         Comment comment = commentRepository.saveAndFlush(CommentMapper.mapToComment(initiator, event, newComment));
-        log.info("Add comment {} from user {}.", newComment, userId);
+        log.info("Add comment {} from user {}.", newComment, newComment.getInitiatorId());
         return comment;
     }
 
@@ -52,43 +52,44 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getComments(List<Long> commentsIds, List<Long> userIds, List<Long> eventIds, String text,
-                                     LocalDateTime start, LocalDateTime end, String sort, int from, int size) {
-        LocalDateTime startDate = start;
-        LocalDateTime endDate = end;
-        Pageable pageable = PageRequest.of(from, size,
-            Sort.by("created".equals(sort) ? "created" : "event_id"));
+    public List<Comment> getComments(Filter filter, Pageable pageable) {
+        LocalDateTime startDate = filter.getStart();
+        LocalDateTime endDate = filter.getEnd();
+        List<Long> commentsIds = filter.getCommentsIds();
+        List<Long> userIds = filter.getUserIds();
+        List<Long> eventIds = filter.getEventIds();
+        String text = filter.getText();
         List<Comment> result = new ArrayList<>();
-        if (start == null) {
+        if (filter.getStart() == null) {
             startDate = LocalDateTime.now().minusYears(100);
         }
-        if (end == null) {
+        if (filter.getEnd() == null) {
             endDate = LocalDateTime.now().plusYears(100);
         }
         if (commentsIds == null && userIds == null && eventIds == null && text == null) {
             result = commentRepository.findAll(pageable).getContent();
         }
         if (commentsIds != null && userIds == null && eventIds == null && text == null) {
-            result = commentRepository.findAllByCommentIds(commentsIds, startDate, endDate, pageable);
+            result = commentRepository.findByCommentIds(commentsIds, startDate, endDate, pageable);
         }
         if (commentsIds == null && userIds != null && eventIds == null && text == null) {
-            result = commentRepository.findAllByInitiatorIds(userIds, startDate, endDate, pageable);
+            result = commentRepository.findByInitiatorIds(userIds, startDate, endDate, pageable);
         }
         if (commentsIds == null && userIds == null && eventIds != null && text == null) {
-            result = commentRepository.findAllByEventIds(eventIds, startDate, endDate, pageable);
+            result = commentRepository.findByEventIds(eventIds, startDate, endDate, pageable);
         }
         if (commentsIds == null && userIds == null && eventIds == null && text != null) {
-            result = commentRepository.findAllByText(text, startDate, endDate, pageable);
+            result = commentRepository.findByText(text, startDate, endDate, pageable);
         }
         if (commentsIds != null && userIds != null && eventIds == null && text == null) {
             result =
-                commentRepository.findAllByCommentAndInitiatorIds(commentsIds, userIds, startDate, endDate, pageable);
+                commentRepository.findByCommentAndInitiatorIds(commentsIds, userIds, startDate, endDate, pageable);
         }
         if (commentsIds != null && userIds == null && eventIds != null && text == null) {
-            result = commentRepository.findAllByCommentAndEventIds(commentsIds, eventIds, startDate, endDate, pageable);
+            result = commentRepository.findByCommentAndEventIds(commentsIds, eventIds, startDate, endDate, pageable);
         }
         if (commentsIds != null && userIds == null && eventIds == null && text != null) {
-            result = commentRepository.findAllByCommentIdsAndText(commentsIds, text, startDate, endDate, pageable);
+            result = commentRepository.findByCommentIdsAndText(commentsIds, text, startDate, endDate, pageable);
         }
         if (commentsIds == null && userIds != null && eventIds != null && text == null) {
             result = commentRepository.findAllByInitiatorAndEventIds(userIds, eventIds, startDate, endDate, pageable);
@@ -128,17 +129,17 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment updateComment(Long userId, Long commentId, NewComment newComment) {
-        containsUser(userId);
-        containsComment(commentId);
-        if (newComment == null || newComment.getText().isBlank()) {
+    public Comment updateComment(UpdateComment updateComment) {
+        containsUser(updateComment.getInitiatorId());
+        containsComment(updateComment.getId());
+        if (updateComment == null || updateComment.getText().isBlank()) {
             throw new ValidationException("Comment can't be empty.");
         }
-        Comment comment = commentRepository.findById(commentId).get();
-        if (!comment.getInitiator().getId().equals(userId)) {
+        Comment comment = commentRepository.findById(updateComment.getId()).get();
+        if (!comment.getInitiator().getId().equals(updateComment.getInitiatorId())) {
             throw new ConflictException("You can't update comment another user.");
         }
-        comment.setText(newComment.getText());
+        comment.setText(updateComment.getText());
         log.info("Update comment with id " + comment.getId());
         return commentRepository.saveAndFlush(comment);
     }

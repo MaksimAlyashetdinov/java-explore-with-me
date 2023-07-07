@@ -15,43 +15,43 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("SELECT c from Comment c " +
         "where c.id IN :commentIds and " +
         "c.created between :start and :end")
-    List<Comment> findAllByCommentIds(List<Long> commentIds, LocalDateTime start, LocalDateTime end, Pageable pageable);
+    List<Comment> findByCommentIds(List<Long> commentIds, LocalDateTime start, LocalDateTime end, Pageable pageable);
 
     @Query("SELECT c from Comment c " +
         "where c.initiator.id IN :initiatorIds and " +
         "c.created between :start and :end")
-    List<Comment> findAllByInitiatorIds(List<Long> initiatorIds, LocalDateTime start, LocalDateTime end,
+    List<Comment> findByInitiatorIds(List<Long> initiatorIds, LocalDateTime start, LocalDateTime end,
                                         Pageable pageable);
 
     @Query("SELECT c from Comment c " +
         "where c.event.id IN :eventIds and " +
         "c.created between :start and :end")
-    List<Comment> findAllByEventIds(List<Long> eventIds, LocalDateTime start, LocalDateTime end, Pageable pageable);
+    List<Comment> findByEventIds(List<Long> eventIds, LocalDateTime start, LocalDateTime end, Pageable pageable);
 
     @Query("SELECT c from Comment c " +
         "where (c.text like %:text%) and " +
         "c.created between :start and :end")
-    List<Comment> findAllByText(String text, LocalDateTime start, LocalDateTime end, Pageable pageable);
+    List<Comment> findByText(String text, LocalDateTime start, LocalDateTime end, Pageable pageable);
 
     @Query("SELECT c from Comment c " +
         "where c.id IN :commentIds and " +
         "c.initiator.id IN :initiatorIds and " +
         "c.created between :start and :end")
-    List<Comment> findAllByCommentAndInitiatorIds(List<Long> commentIds, List<Long> initiatorIds, LocalDateTime start,
+    List<Comment> findByCommentAndInitiatorIds(List<Long> commentIds, List<Long> initiatorIds, LocalDateTime start,
                                                   LocalDateTime end, Pageable pageable);
 
     @Query("SELECT c from Comment c " +
         "where c.id IN :commentIds and " +
         "c.event.id IN :eventIds and " +
         "c.created between :start and :end")
-    List<Comment> findAllByCommentAndEventIds(List<Long> commentIds, List<Long> eventIds, LocalDateTime start,
+    List<Comment> findByCommentAndEventIds(List<Long> commentIds, List<Long> eventIds, LocalDateTime start,
                                               LocalDateTime end, Pageable pageable);
 
     @Query("SELECT c from Comment c " +
         "where c.id IN :commentIds and " +
         "(c.text like %:text%) and " +
         "c.created between :start and :end")
-    List<Comment> findAllByCommentIdsAndText(List<Long> commentIds, String text, LocalDateTime start, LocalDateTime end,
+    List<Comment> findByCommentIdsAndText(List<Long> commentIds, String text, LocalDateTime start, LocalDateTime end,
                                              Pageable pageable);
 
     @Query("SELECT c from Comment c " +
