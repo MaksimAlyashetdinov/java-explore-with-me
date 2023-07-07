@@ -22,6 +22,7 @@ import ru.practicum.comment.model.Comment;
 import ru.practicum.comment.service.CommentService;
 import ru.practicum.comment.util.Filter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -40,9 +41,11 @@ public class CommentController {
     @ResponseStatus(HttpStatus.CREATED)
     public Comment addComment(@PathVariable @NotNull @Positive Long userId,
                               @PathVariable @NotNull @Positive Long eventId,
-                              @RequestBody @NotNull String text) {
+                              @RequestBody @NotNull @Valid NewComment newComment) {
         log.info("Add comment request.");
-        return commentService.addComment(new NewComment(userId, eventId, text));
+        newComment.setInitiatorId(userId);
+        newComment.setEventId(eventId);
+        return commentService.addComment(newComment);
     }
 
     @GetMapping("/{userId}/comment/{commentId}")
@@ -72,9 +75,11 @@ public class CommentController {
     @PatchMapping("/{userId}/comment/{commentId}")
     public Comment updateComment(@PathVariable @NotNull @Positive Long userId,
                                  @PathVariable @NotNull @Positive Long commentId,
-                                 @RequestBody @NotNull String text) {
+                                 @RequestBody @NotNull UpdateComment updateComment) {
         log.info("Update comment request.");
-        return commentService.updateComment(new UpdateComment(commentId, userId, text));
+        updateComment.setInitiatorId(userId);
+        updateComment.setId(commentId);
+        return commentService.updateComment(updateComment);
     }
 
     @DeleteMapping("/{userId}/comment/{commentId}")
