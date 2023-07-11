@@ -20,7 +20,7 @@ import ru.practicum.comment.dto.NewComment;
 import ru.practicum.comment.dto.UpdateComment;
 import ru.practicum.comment.model.Comment;
 import ru.practicum.comment.service.CommentService;
-import ru.practicum.comment.util.Filter;
+import ru.practicum.comment.util.CommentFilter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -69,7 +69,7 @@ public class CommentController {
         log.info("Get comments request.");
         Pageable pageable = PageRequest.of(from, size,
             Sort.by("created".equals(sort) ? "created" : "event_id"));
-        return commentService.getComments(new Filter(comments, users, events, text, rangeStart, rangeEnd, sort), pageable);
+        return commentService.getComments(new CommentFilter(comments, users, events, text, rangeStart, rangeEnd, sort), pageable);
     }
 
     @PatchMapping("/{userId}/comment/{commentId}")

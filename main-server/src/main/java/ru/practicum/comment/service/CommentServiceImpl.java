@@ -9,7 +9,7 @@ import ru.practicum.comment.dto.UpdateComment;
 import ru.practicum.comment.mapper.CommentMapper;
 import ru.practicum.comment.model.Comment;
 import ru.practicum.comment.repository.CommentRepository;
-import ru.practicum.comment.util.Filter;
+import ru.practicum.comment.util.CommentFilter;
 import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.ConflictException;
@@ -52,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getComments(Filter filter, Pageable pageable) {
+    public List<Comment> getComments(CommentFilter filter, Pageable pageable) {
         LocalDateTime startDate = filter.getStart();
         LocalDateTime endDate = filter.getEnd();
         List<Long> commentsIds = filter.getCommentsIds();

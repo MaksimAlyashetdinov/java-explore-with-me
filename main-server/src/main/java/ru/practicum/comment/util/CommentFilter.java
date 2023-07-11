@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Filter {
+public class CommentFilter {
 
     List<Long> commentsIds;
     List<Long> userIds;
