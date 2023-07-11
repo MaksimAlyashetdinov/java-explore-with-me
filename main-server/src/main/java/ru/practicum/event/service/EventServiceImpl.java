@@ -2,6 +2,8 @@ package ru.practicum.event.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -10,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import ru.practicum.EndpointHitDto;
 import ru.practicum.StatClient;
 import ru.practicum.ViewStatsDto;
@@ -48,6 +52,7 @@ public class EventServiceImpl implements EventService {
     private final CategoryService categoryService;
     private final CategoryRepository categoryRepository;
     private final StatClient statClient;
+    private final RestTemplate rest;
     public static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern(
             "yyyy-MM-dd HH:mm:ss");
 
@@ -278,35 +283,35 @@ public class EventServiceImpl implements EventService {
         }
         if ((text == null || text.isBlank()) && (categories == null || categories.isEmpty())
                 && paid == null) {
-            events = eventRepository.findAllWithoutTextAndCategoryAndPaid(start,
+            events = eventRepository.findWithoutTextAndCategoryAndPaid(start,
                     end, EventState.PUBLISHED, pageable);
         } else if ((text == null || text.isBlank()) && (categories == null || categories.isEmpty())
                 && paid != null) {
-            events = eventRepository.findAllWithoutTextAndCategory(paid, start, end,
+            events = eventRepository.findWithoutTextAndCategory(paid, start, end,
                     EventState.PUBLISHED, pageable);
         } else if ((text == null || text.isBlank()) && (categories != null && !categories.isEmpty())
                 && paid == null) {
-            events = eventRepository.findAllWithoutTextAndPaid(categories, start,
+            events = eventRepository.findWithoutTextAndPaid(categories, start,
                     end, EventState.PUBLISHED, pageable);
         } else if ((text != null && !text.isBlank()) && (categories == null || categories.isEmpty())
                 && paid == null) {
-            events = eventRepository.findAllWithoutCategoryAndPaid(text, start,
+            events = eventRepository.findWithoutCategoryAndPaid(text, start,
                     end, EventState.PUBLISHED, pageable);
         } else if ((text != null && !text.isBlank()) && (categories != null
                 && !categories.isEmpty()) && paid == null) {
-            events = eventRepository.findAllWithFilterWithoutPaid(text, categories, start,
+            events = eventRepository.findWithFilterWithoutPaid(text, categories, start,
                     end, EventState.PUBLISHED, pageable);
         } else if ((text != null && !text.isBlank()) && (categories == null || categories.isEmpty())
                 && paid != null) {
-            events = eventRepository.findAllWithoutCategory(text, paid, start,
+            events = eventRepository.findWithoutCategory(text, paid, start,
                     end, EventState.PUBLISHED, pageable);
         } else if ((text == null || text.isBlank()) && (categories != null && !categories.isEmpty())
                 && paid != null) {
-            events = eventRepository.findAllWithoutText(categories, paid, start,
+            events = eventRepository.findWithoutText(categories, paid, start,
                     end, EventState.PUBLISHED, pageable);
         } else if ((text != null && !text.isBlank()) && (categories != null
                 && !categories.isEmpty()) && paid != null) {
-            events = eventRepository.findAllWithFilter(text, categories, paid, start,
+            events = eventRepository.findWithFilter(text, categories, paid, start,
                     end, EventState.PUBLISHED, pageable);
         }
         EndpointHitDto endpointHitDto = EndpointHitDto.builder()
@@ -315,7 +320,9 @@ public class EventServiceImpl implements EventService {
                                                       .ip(request.getRemoteAddr())
                                                       .timestamp(LocalDateTime.now())
                                                       .build();
-        statClient.addStats(endpointHitDto);
+        //statClient.addStats(endpointHitDto);
+        URI uri = URI.create("http://stats-server:9090/hit");
+        rest.postForObject(uri, endpointHitDto, EndpointHitDto.class);
         log.info("Get events.");
         return events.stream()
                      .map(EventMapper::mapToEventShortDto)
@@ -349,7 +356,9 @@ public class EventServiceImpl implements EventService {
                                                       .ip(request.getRemoteAddr())
                                                       .timestamp(LocalDateTime.now())
                                                       .build();
-        statClient.addStats(endpointHitDto);
+        //statClient.addStats(endpointHitDto);
+        URI uriForPost = URI.create("http://stats-server:9090/hit");
+        rest.postForObject(uriForPost, endpointHitDto, EndpointHitDto.class);
         log.info("Get event by id.");
         return EventMapper.mapToEventFullDto(event);
     }
